@@ -5,6 +5,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import Required, Length
+from flask_pagedown.fields import PageDownField
 
 
 class NameForm(FlaskForm):
@@ -14,6 +15,6 @@ class NameForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=([Required(), Length(1, 64)]))
-    content = TextAreaField('Write Now', validators=[Required()])
+    content = PageDownField('Write Now', validators=[Required()])
     summary = TextAreaField('Summary', validators=[Required()])
     submit = SubmitField('Submit')

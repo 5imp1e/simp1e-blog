@@ -7,7 +7,9 @@ from flask_login import UserMixin, AnonymousUserMixin
 from . import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import login_manager
+from . import db, login_manager
+import bleach
+from markdown import markdown
 
 
 class Role(db.Model):
@@ -68,6 +70,7 @@ class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
+    content_html = db.Column(db.Text)
     title = db.Column(db.Text)
     summary = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -87,3 +90,15 @@ class Post(db.Model):
                      author_id='simp1e')
             db.session.add(p)
             db.session.commit()
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1',
+                        'h2', 'h3', 'p']
+        target.content_html = bleach.linkify(bleach.clean(
+            markdown(value, out_format='html'),
+            tags=allowed_tags, strip=True))
+
+
+db.event.listen(Post.content, 'set', Post.on_changed_body)
