@@ -71,7 +71,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text)
     content_html = db.Column(db.Text)
-    title = db.Column(db.Text)
+    title = db.Column(db.Text, unique=True)
     summary = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))

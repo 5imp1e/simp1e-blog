@@ -32,10 +32,9 @@ def post_list():
 
 @main.route('/post_detail/<string:title>', methods=['GET', 'POST'])
 def post_detail(title):
-    #    title = title.replace(' ', '_')
     post = Post.query.filter_by(title=title).first_or_404()
     return render_template('post_detail.html', post=post)
-
+#通过在模板中进行替换从而解决链接中underscore问题
 
 @main.route('/post_blog/', methods=['GET', 'POST'])
 @login_required
@@ -48,7 +47,7 @@ def post_blog():
                     summary=form.summary.data)
         db.session.add(post)
 #        db.session.commit()
-        return redirect(url_for('main.post_detail'))
+        return redirect(url_for('main.post_list'))
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('post_blog.html', form=form, posts=posts)
 
@@ -65,7 +64,7 @@ def edit(title):
         db.session.add(post)
         db.session.commit()
         flash('The post has been updated')
-        return redirect(url_for('post_detial', title=title))
+        return redirect(url_for('main.post_detail', title=title))
     form.title.data = post.title
     form.summary.data = post.summary
     form.content.data = post.content

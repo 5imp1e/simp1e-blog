@@ -95,7 +95,7 @@
                 {% for post in posts %}
                 <div class="post-preview">
                     <a href="{{ url_for('main.post_detail', title=post.title) }}">
-                        <h2 class="post-title">{{ post.title }}</h2>
+                        <h2 class="post-title">{{ post.title | replace('_', ' ') }}</h2>
                         <h3 class="post-subtitle">{{ post.summary }}</h3>
                     </a>
                     <p class="post-meta">Posted by <a href="#">{{ post.author.username }}</a>&nbsp;on {{ moment(post.timestamp).format('Do MMM YYYY') }}</p>
