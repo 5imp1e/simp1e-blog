@@ -77,11 +77,17 @@ def delete(title):
     post = Post.query.filter_by(title=title).first_or_404()
     form = PostForm()
     if form.validate_on_submit():
-        try:
-            db.session.delete(title)
-        except:
-            db.session.rollback()
-            flash('delete error')
-        else:
-            flash('success!')
-    return render_template('post_list.html')
+        db.session.delete(post)
+#        try:
+#            db.session.delete(post)
+#        except:
+#            db.session.rollback()
+#            flash('delete error')
+#        else:
+#            db.session.commit()
+#            flash('success!')
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+    posts = pagination.items
+    return render_template('post_list.html', post=posts, pagination=pagination)

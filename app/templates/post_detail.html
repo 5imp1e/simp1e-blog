@@ -99,17 +99,22 @@
             </div>
         </div>
     </aritcle>
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4 text-center">
-            {% if current_user == post.author %}
-            <a href="{{ url_for('.edit', title=post.title) }}" >
-                <span class="btn btn-primary btn-raised">Edit</span>
-            </a>
-            {% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 text-center">
+                {% if current_user == post.author %}
+                <a href="{{ url_for('.edit', title=post.title) }}" >
+                    <span class="btn btn-primary btn-raised">Edit</span>
+                </a>
+                <a href="{{ url_for('.delete', title=post.title) }}">
+                    <span class="btn btn-primary btn-raised">Delete</span>
+                </a>
+                    {% endif %}
+            </div>
         </div>
     </div>
     <hr>
-
+    
     <footer>
         <div class="container">
             <div class="row">
