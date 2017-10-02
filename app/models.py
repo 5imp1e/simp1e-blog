@@ -95,9 +95,12 @@ class Post(db.Model):
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1',
-                        'h2', 'h3', 'p']
+                        'h2', 'h3', 'p', 'img']
+        attrs = {
+            'img': ['src', 'alt']
+        }
         target.content_html = bleach.linkify(bleach.clean(
-            markdown(value, out_format='html'),
+            markdown(value, out_format='html'), attributes=attrs,
             tags=allowed_tags, strip=True))
 
 
